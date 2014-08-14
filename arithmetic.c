@@ -29,6 +29,8 @@ int main(int argc, char **argv){
     char *buffer = malloc(buffer_size);
     while(1){
         fgets(buffer, buffer_size, stdin);
+        if(!buffer | !*buffer)
+            break;
         double result = evaluate(NAN, &buffer, 0, 0);
         printf("%f\n", result);        
     }
