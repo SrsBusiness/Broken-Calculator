@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 
 
 #define OPERAND 0
@@ -15,7 +16,7 @@
 
 // useful: * and / are 2 (mod 5), + and - are not
 
-int buffer_size = 1000;
+int buffer_size = 10000;
 
 void token(char **);
 int precedence(char);
@@ -27,9 +28,12 @@ double eval(char, double, double);
 int main(int argc, char **argv){
     // initial input is 49 characters
     char *buffer = malloc(buffer_size);
+    char *save = buffer;
     while(1){
+        buffer = save;
+        memset(buffer, 0, buffer_size);
         fgets(buffer, buffer_size, stdin);
-        if(!buffer | !*buffer)
+        if(!buffer | *buffer == 0)
             break;
         double result = evaluate(NAN, &buffer, 0, 0);
         printf("%f\n", result);        
