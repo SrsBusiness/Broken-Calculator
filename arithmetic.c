@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <assert.h>
 
 
 #define OPERAND 0
@@ -16,7 +17,7 @@
 
 // useful: * and / are 2 (mod 5), + and - are not
 
-int buffer_size = 10000;
+int buffer_size = 100000;
 
 void token(char **);
 int precedence(char);
@@ -94,8 +95,9 @@ double evaluate(double result, char **string, int expect_parens, int elevated){
         if(**string == '('){
             (*string)++;
             result = evaluate(NAN, string, 1, 0);
-            if(is_nan(result)) // NaN != NaN
+            if(is_nan(result)){ // NaN != NaN
                 return NAN;
+            }
         }else{
             old = *string;
             token(string); 
@@ -112,14 +114,17 @@ double evaluate(double result, char **string, int expect_parens, int elevated){
     while(**string){
         if((!current_op && !expect_parens) || (current_op == ')' && expect_parens))
             return result;
-        else if(!is_op(current_op))
+        else if(!is_op(current_op)){
+            assert(0);
             return NAN;
+        }
         // check if next char is a parens
         if(**string == '('){
             (*string)++;
             next_value = evaluate(NAN, string, 1, 0);
-            if(is_nan(next_value)) // NaN != NaN
+            if(is_nan(next_value)){ // NaN != NaN
                 return NAN;
+            }
         }else{
             old = *string;
             token(string);
@@ -131,10 +136,13 @@ double evaluate(double result, char **string, int expect_parens, int elevated){
             case '+': case '-': case '*': case '/': case ')':
                 break;
             case 0:
-                if(expect_parens)
+                if(expect_parens){
+                    assert(0);
                     return NAN;
+                }
                 break;
             default:
+                assert(0);
                 return NAN;
         }
         int diff_precedence = precedence(next_op) - precedence(current_op);

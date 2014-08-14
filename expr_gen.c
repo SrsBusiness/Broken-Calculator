@@ -8,10 +8,10 @@ int gen(char *, int, int, int);
 
 int main(){
     srand(time(NULL));
-    char expr[1000];
+    char expr[10000];
     int i;
-    for(i = 0; i < 1000; i++){
-        expr[gen(expr, 0, 1000, 0)] = 0;
+    for(i = 0; i < 10000000; i++){
+        expr[gen(expr, 0, 10000, 0)] = 0;
         printf("%s\n", expr);
     }
 }
