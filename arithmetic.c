@@ -17,7 +17,7 @@
 
 // useful: * and / are 2 (mod 5), + and - are not
 
-int buffer_size = 100000;
+int buffer_size = 1000000;
 
 void token(char **);
 int precedence(char);
@@ -25,19 +25,24 @@ double evaluate(double, char **, int, int);
 //double parens(char **);
 double eval(char, double, double);
 
-
+int count = 0;
+char *save;
+char *copy;
 int main(int argc, char **argv){
     // initial input is 49 characters
     char *buffer = malloc(buffer_size);
-    char *save = buffer;
+    copy = malloc(buffer_size);
+    save = buffer;
     while(1){
         buffer = save;
         memset(buffer, 0, buffer_size);
         fgets(buffer, buffer_size, stdin);
+        strncpy(copy, buffer, buffer_size);
         if(!buffer | *buffer == 0)
             break;
         double result = evaluate(NAN, &buffer, 0, 0);
-        printf("%f\n", result);        
+        //printf("%f\n", result);        
+        count++;
     }
     //char *old;
     //do{
@@ -115,7 +120,7 @@ double evaluate(double result, char **string, int expect_parens, int elevated){
         if((!current_op && !expect_parens) || (current_op == ')' && expect_parens))
             return result;
         else if(!is_op(current_op)){
-            assert(0);
+            printf("%s\n", copy);
             return NAN;
         }
         // check if next char is a parens
